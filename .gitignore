@@ -1,0 +1,28 @@
+# Personal data — do NOT commit
+*.pdf
+*.docx
+*.doc
+outreach_drafts.md
+outreach_targets.csv
+jobs_scored.csv
+jobs.csv
+email_drafts.md
+seen.json
+seen.json.bak
+
+# Personal docs
+COWORK_*.md
+CLAUDE-CODE-*.md
+upwork-*.md
+portfolio-*.md
+fellowships.md
+Pulsora-*.docx
+
+# Generated
+__pycache__/
+*.pyc
+graphify-out/
+.~lock.*
+
+# Env
+.env
