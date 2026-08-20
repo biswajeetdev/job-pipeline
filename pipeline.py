@@ -16,6 +16,8 @@ from datetime import datetime
 from pathlib import Path
 import requests
 
+from linkedin_source import fetch_linkedin
+
 # ── Paths ────────────────────────────────────────────────────────────────────
 DIR        = Path(__file__).parent
 JOBS_CSV   = DIR / "jobs.csv"
@@ -47,6 +49,12 @@ INCLUDE_ANY = [
     "trainee", "research assistant", "research intern", "student developer",
     "junior developer", "junior engineer", "entry level", "entry-level",
     "new grad", "recent grad", "graduate developer", "0-2 years",
+    # founder's office / chief of staff / startup ops
+    "founder's office", "founders office", "chief of staff", "cos",
+    "business operations", "biz ops", "bizops", "strategy and operations",
+    "strategy & operations", "operations associate", "program manager",
+    "executive assistant", "special projects", "growth associate",
+    "product operations", "revenue operations", "founder associate",
 ]
 EXCLUDE_ALL = [
     "10+ years", "15+ years", "c++ only", "java only", "ios developer",
@@ -599,7 +607,9 @@ def generate_email(job: dict, token: str) -> str:
 
 # ── Output ────────────────────────────────────────────────────────────────────
 
-CSV_FIELDS = ["score", "company", "title", "location", "url", "source", "reason", "published", "applied", "notes"]
+CSV_FIELDS = ["score", "company", "title", "location", "url", "source", "reason", "published", "applied", "notes",
+              # populated by the linkedin source; read back by apollo_enrich.py
+              "contact_email", "company_url"]
 
 def save_csv(jobs: list[dict]):
     import csv as _csv
@@ -643,6 +653,8 @@ def main():
     parser.add_argument("--no-llm", action="store_true", help="Skip LLM scoring")
     parser.add_argument("--limit", type=int, default=200, help="Max HN comments to process")
     parser.add_argument("--threshold", type=int, default=6, help="Min score for email drafts")
+    parser.add_argument("--no-linkedin", action="store_true",
+                        help="Skip the LinkedIn source (it is the slowest and the only one that can get rate-limited)")
     args = parser.parse_args()
 
     token = None
@@ -661,7 +673,8 @@ def main():
         fetch_wellfound() +
         fetch_yc() +
         fetch_internshala() +
-        fetch_remoteok()
+        fetch_remoteok() +
+        (fetch_linkedin() if not args.no_linkedin else [])
     )
 
     # Deduplicate against seen
