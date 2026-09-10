@@ -17,6 +17,16 @@ upwork-*.md
 portfolio-*.md
 fellowships.md
 Pulsora-*.docx
+# Job application drafts. foundingteams_application.md matched none of the rules
+# above and sat untracked in a public repo, where one `git add -A` would have
+# published an unsent application with its open decisions in it.
+*_application.md
+*-application.md
+*_APPLICATION.md
+
+# Editor/OS noise
+.DS_Store
+.claude/
 
 # Generated
 __pycache__/
