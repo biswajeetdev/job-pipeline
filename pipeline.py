@@ -50,7 +50,7 @@ INCLUDE_ANY = [
     "junior developer", "junior engineer", "entry level", "entry-level",
     "new grad", "recent grad", "graduate developer", "0-2 years",
     # founder's office / chief of staff / startup ops
-    "founder's office", "founders office", "chief of staff", "cos",
+    "founder's office", "founders office", "chief of staff",  # not "cos": substring match hits "cost", "macos"
     "business operations", "biz ops", "bizops", "strategy and operations",
     "strategy & operations", "operations associate", "program manager",
     "executive assistant", "special projects", "growth associate",
